@@ -11,5 +11,5 @@ To execute the application on your machine follow these steps:
 5. Now upon executing the app.py file, you will see the url on the console. 
 6. I have documented code with Swagger UI. You can use it to test the APIs.
 
-NOTE: If you get erros for PYTHONPATh. Use: $env:PYTHONPATH='.' this command wihthin the environemnt and root folder.
+NOTE: If you get erros for PYTHONPATH. Use: $env:PYTHONPATH='.' this command wihthin the environemnt and root folder.
 To execute the application use command python .\backend\app.py from the root directory.
