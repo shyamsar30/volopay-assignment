@@ -69,5 +69,18 @@ class DataDao(GenericDao):
             (func.sum(self.model.seats) * 100.0 / sum)
             .label('percentage')
         ).group_by(self.model.department).all()
+    
+    def get_monthly_sales(self, product, year):
+        return g.db_session.query(
+            extract('month', self.model.date).label('month'),
+            func.sum(self.model.amount).label('monthly_sales')
+        ).filter(
+            extract('year', self.model.date) == year,
+            self.model.software == product
+        ).group_by(
+            func.extract('month', self.model.date)
+        ).order_by(
+            text('month')
+        ).all()
 
 data_dao = DataDao()

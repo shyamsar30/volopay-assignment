@@ -23,3 +23,7 @@ class NthMostTotalItemsValidator(Schema):
             pass
         else:
             raise ValidationError("Item By should one of the following: quantity || price")
+        
+class MonthlySalesValidator(Schema):
+    year = Integer(required=True, allow_none=False)
+    product = String(required=True, allow_none=False)

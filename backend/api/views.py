@@ -55,3 +55,16 @@ def get_department_wise_sold_items(data):
         response[data.department] = "%.2f" % data.percentage
 
     return respond(200, "Success", payload=response)
+
+def get_monthly_sales(data):
+    product = data.get('product')
+    year = data.get('year')
+
+    result = data_dao.get_monthly_sales(product=product, year=year)
+
+    response = {}
+
+    for data in result:
+        response[int(data.month)] = data.monthly_sales
+
+    return respond(200, "Success", payload=response)

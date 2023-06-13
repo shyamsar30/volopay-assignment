@@ -1,8 +1,8 @@
 from flask import request
 from flask_restx import Namespace, Resource, fields
 
-from backend.api.validators import NthMostTotalItemsValidator, TotalItemsValidator, DepartmentWiseSoldItemsValidator
-from backend.api.views import get_total_items, get_nth_most_total_item, get_department_wise_sold_items
+from backend.api.validators import NthMostTotalItemsValidator, TotalItemsValidator, DepartmentWiseSoldItemsValidator, MonthlySalesValidator
+from backend.api.views import get_total_items, get_nth_most_total_item, get_department_wise_sold_items, get_monthly_sales
 
 
 namespace = Namespace("My Namespace", "All Data", path="")
@@ -65,3 +65,21 @@ class DepartmentWiseSoldItems(Resource):
         """
         validated_json = DepartmentWiseSoldItemsValidator().load(request.json)
         return get_department_wise_sold_items(validated_json)
+
+@namespace.route("/monthly_sales")
+class MonthlySalesView(Resource):
+    POST_DOC_MODEL = namespace.model(
+        "MonthlySales",
+        {
+            "product": fields.String(example="Apple", description="Product Name as in database"),
+            "year": fields.String(example="2022", description="Year")
+        }
+    )
+
+    @namespace.expect(POST_DOC_MODEL)
+    def post(self):
+        """
+        What is the percentage of sold items (seats) department wise?
+        """
+        validated_json = MonthlySalesValidator().load(request.json)
+        return get_monthly_sales(validated_json)
