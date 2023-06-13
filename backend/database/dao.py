@@ -1,5 +1,5 @@
 from flask import g
-from sqlalchemy import extract, func
+from sqlalchemy import extract, func, desc, text
 
 
 from backend.database.models import Data
@@ -20,17 +20,42 @@ class DataDao(GenericDao):
     model = Data
     schema = DataSchema
 
-    def get_total_items(self, start_data, end_date, department):
+    def get_total_items(self, start_date, end_date, department):
         return g.db_session.query(
             self.model
         ).filter(
-            extract('quarter', self.model.date) == 3,
-            self.model.date.between(start_data, end_date),
+            self.model.date.between(start_date, end_date),
             self.model.department == department
-        ).group_by(
-            extract('year', self.model.date)
         ).with_entities(
-            func.sum(self.model.seats).label('tatal_count')
+            func.sum(self.model.seats).label('total_count')
         ).first()
+    
+    def get_nth_most_sold_item_by_quantity(self, start_date, end_date):
+        return g.db_session.query(
+            self.model
+        ).filter(
+            self.model.date.between(start_date, end_date)
+        ).group_by(
+            self.model.software
+        ).with_entities(
+            func.sum(self.model.seats).label('total_count'),
+            self.model.software
+        ).order_by(
+            desc(text('total_count'))
+        ).all()
+    
+    def get_nth_most_sold_item_by_price(self, start_date, end_date):
+        return g.db_session.query(
+            self.model
+        ).filter(
+            self.model.date.between(start_date, end_date)
+        ).group_by(
+            self.model.software
+        ).with_entities(
+            func.sum(self.model.amount).label('total_count'),
+            self.model.software
+        ).order_by(
+            desc(text('total_count'))
+        ).all()
 
 data_dao = DataDao()
