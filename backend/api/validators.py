@@ -7,6 +7,10 @@ class TotalItemsValidator(Schema):
     end_date = Date(required=True, allow_none=False)
     department = String(required=True, allow_none=False)
 
+class DepartmentWiseSoldItemsValidator(Schema):
+    start_date = Date(required=True, allow_none=False)
+    end_date = Date(required=True, allow_none=False)
+
 class NthMostTotalItemsValidator(Schema):
     start_date = Date(required=True, allow_none=False)
     end_date = Date(required=True, allow_none=False)

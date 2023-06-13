@@ -57,5 +57,17 @@ class DataDao(GenericDao):
         ).order_by(
             desc(text('total_count'))
         ).all()
+    
+    def get_department_wise_sold_items(self, start_date, end_date):
+
+        sum = g.db_session.query(func.sum(self.model.seats)).scalar()
+
+        return g.db_session.query(
+            self.model
+        ).with_entities(
+            self.model.department,
+            (func.sum(self.model.seats) * 100.0 / sum)
+            .label('percentage')
+        ).group_by(self.model.department).all()
 
 data_dao = DataDao()

@@ -41,3 +41,17 @@ def get_nth_most_total_item(data):
             return "NO FOUND"
 
         return result[n-1][1]
+    
+
+def get_department_wise_sold_items(data):
+    result = data_dao.get_department_wise_sold_items(
+        start_date=data.get('start_date'),
+        end_date=data.get('end_date')
+    )
+
+    response = {}
+
+    for data in result:
+        response[data.department] = "%.2f" % data.percentage
+
+    return respond(200, "Success", payload=response)
